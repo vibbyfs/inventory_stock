@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const apiRoutes = require('./routes')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -10,6 +11,8 @@ app.get('/health', (req, res) => {
         message: "API is running"
     })
 })
+
+app.use('/api/v1', apiRoutes)
 
 app.use((req, res, next) => {
     res.status(404).json({
