@@ -1,7 +1,8 @@
 const express = require('express')
+const { authentication } = require('../middlewares/auth.middleware')
 const router = express.Router()
 
-router.get('/item', (req, res) => {
+router.get('/', (req, res) => {
     res.status(200).json({
         status: 'ok',
         data: [],

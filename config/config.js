@@ -7,7 +7,8 @@ module.exports = {
     database: process.env.DB_NAME || 'WAREHOUSE-CMS',
     host: process.env.DB_HOST || '127.0.0.1',
     port: Number(process.env.DB_PORT) || 5432,
-    dialect: 'postgres'
+    dialect: 'postgres',
+    logging: false
   },
   test: {
     username: process.env.DB_USER || 'postgres',
@@ -15,7 +16,8 @@ module.exports = {
     database: process.env.DB_NAME || 'WAREHOUSE-CMS-TEST',
     host: process.env.DB_HOST || '127.0.0.1',
     port: Number(process.env.DB_PORT) || 5432,
-    dialect: 'postgres'
+    dialect: 'postgres',
+    logging: false
   },
   production: {
     username: process.env.DB_USER,
@@ -23,6 +25,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
-    dialect: 'postgres'
+    dialect: 'postgres',
+    logging: false
   }
 }

@@ -4,6 +4,7 @@ const router = express.Router()
 const authRoutes = require('./auth.routes')
 const warehouseRoutes = require('./warehouse.routes')
 const itemRoutes = require('./item.routes')
+const { authentication } = require('../middlewares/auth.middleware')
 
 router.use('/auth', authRoutes)
 router.use('/warehouse', warehouseRoutes)

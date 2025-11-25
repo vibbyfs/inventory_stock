@@ -13,7 +13,7 @@ async function findUserByEmail(email) {
 }
 
 async function findUserByPK(id) {
-    return User.findByPK(id, {
+    return User.findByPk(id, {
         include: [
             {
                 model: Role,
