@@ -23,8 +23,8 @@ async function findUserByPK(id) {
     })
 }
 
-async function createUser(Userdata) {
-    return User.create(Userdata)
+async function createUser(userData) {
+    return User.create(userData)
 }
 
 module.exports = {
