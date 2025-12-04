@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const apiRoutes = require('./routes')
+const errorHandler = require('./middlewares/errorhandler')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -29,5 +30,7 @@ app.use((err, req, res, next) => {
         message: "Internal server error"
     })
 })
+
+app.use(errorHandler)
 
 module.exports = app

@@ -1,9 +1,11 @@
 const authService = require('../services/auth.service')
+const { loginSchema } = require('../validation/auth.schema')
 
 async function login(req, res, next) {
 
     try {
-        const { email, password } = req.body
+        const validateData = loginSchema.parse(req.body)
+        const { email, password } = validateData
         const { user, access_token, refresh_token } = await authService.login({ email, password })
 
         const userWithoutPassword = {

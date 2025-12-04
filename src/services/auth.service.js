@@ -1,15 +1,16 @@
 const { hashPassword } = require('../utils/bcryptjs')
 const userRepository = require('../repositories/user.repository')
 const { generateAccessToken, generateRefreshToken } = require('../utils/jwt')
+const { unauthorized } = require('../utils/errors')
 
 async function login({ email, password }) {
     const user = await userRepository.findUserByEmail(email)
     if (!user) {
-        throw new Error('Invalid email or password')
+        throw unauthorized('Invalid email or password')
     }
     const isPasswordValid = await hashPassword(password, user.password)
     if (!isPasswordValid) {
-        throw new Error('Invalid email or password')
+        throw unauthorized('Invalid email or password')
     }
 
     const payload = {

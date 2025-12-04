@@ -1,5 +1,6 @@
 const { verifyAccessToken } = require("../utils/jwt")
 const userRepository = require('../repositories/user.repository')
+const { unauthorized, forbidden } = require('../utils/errors')
 
 async function authentication(req, res, next) {
     try {
@@ -10,7 +11,7 @@ async function authentication(req, res, next) {
         const valueToken = rawToken[1]
 
         if (keyToken !== 'Bearer' || !valueToken) {
-            return res.status(401).json({ status: 'error', message: 'Unauthorized' })
+            throw next(unauthorized())
         }
 
         const token = verifyAccessToken(valueToken)
@@ -18,7 +19,7 @@ async function authentication(req, res, next) {
 
         const user = await userRepository.findUserByPK(token.userId)
         if (!user) {
-            return res.status(401).json({ status: 'error', message: 'Unauthorized' })
+            throw next(unauthorized())
         }
 
         req.user = {
@@ -37,10 +38,7 @@ async function authentication(req, res, next) {
 function authorize(...allowedRoles) {
     return (req, res, next) => {
         if (!req.user) {
-            return res.status(401).json({
-                status: 'error',
-                message: 'Unauthorized'
-            })
+            return next(unauthorized())
         }
 
         if (allowedRoles.length === 0) {
@@ -50,10 +48,7 @@ function authorize(...allowedRoles) {
         const userRole = req.user.roleName
 
         if (!allowedRoles || !allowedRoles.includes(userRole)) {
-            return res.status(403).json({
-                status: 'error',
-                message: 'Forbidden'
-            })
+            return next(forbidden())
         }
         next()
     }
