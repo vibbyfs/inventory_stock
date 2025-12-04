@@ -22,15 +22,6 @@ app.use((req, res, next) => {
     })
 })
 
-app.use((err, req, res, next) => {
-    console.log(err)
-
-    res.status(500).json({
-        status: "error",
-        message: "Internal server error"
-    })
-})
-
 app.use(errorHandler)
 
 module.exports = app
