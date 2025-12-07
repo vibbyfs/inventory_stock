@@ -11,15 +11,15 @@ async function authentication(req, res, next) {
         const valueToken = rawToken[1]
 
         if (keyToken !== 'Bearer' || !valueToken) {
-            throw next(unauthorized())
+            throw unauthorized()
         }
 
-        const token = verifyAccessToken(valueToken)
+        const token = await verifyAccessToken(valueToken)
         console.log(token);
 
         const user = await userRepository.findUserByPK(token.userId)
         if (!user) {
-            throw next(unauthorized())
+            throw unauthorized()
         }
 
         req.user = {

@@ -1,7 +1,7 @@
 const { Warehouse, Item } = require('../../models')
 
 async function createWarehouse(data) {
-    return Warehouse.create()
+    return Warehouse.create(data)
 }
 
 async function findWarehouseById(id) {
