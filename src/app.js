@@ -5,9 +5,11 @@ const errorHandler = require('./middlewares/errorhandler')
 const corsOrigin = require('../config/allowed-cors')
 const { apiLimiter } = require('./middlewares/rate-limit.middleware')
 const helmet = require('helmet')
+const morgan = require('morgan')
 
 app.use(helmet())
 app.use(corsOrigin)
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
