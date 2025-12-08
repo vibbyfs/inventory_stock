@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      DeliveryOrder.hasMany(models.DeliveryOrderItem, {
+        foreignKey: 'deliveryOrderId',
+        as: 'items'
+      });
       DeliveryOrder.belongsTo(models.User, { foreignKey: 'createdBy', as: 'creator' })
       DeliveryOrder.belongsTo(models.User, { foreignKey: 'updatedBy', as: 'updater' })
     }
@@ -40,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     updatedBy: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

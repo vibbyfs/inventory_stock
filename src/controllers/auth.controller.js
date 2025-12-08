@@ -1,5 +1,6 @@
 const authService = require('../services/auth.service')
 const { loginSchema } = require('../validation/auth.schema')
+const { badRequest } = require('../utils/errors')
 
 async function login(req, res, next) {
 
@@ -27,6 +28,26 @@ async function login(req, res, next) {
     }
 }
 
+async function refresh(req, res, next) {
+    try {
+        const { refresh_token } = req.body
+
+        if (!refresh_token) {
+            throw badRequest('Refresh token is required')
+        }
+
+        const tokens = await authService.refreshToken(refresh_token)
+
+        res.status(200).json({
+            status: 'success',
+            data: tokens
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
 module.exports = {
-    login
+    login,
+    refresh
 }

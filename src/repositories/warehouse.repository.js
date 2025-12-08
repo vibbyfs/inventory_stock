@@ -4,8 +4,8 @@ async function createWarehouse(data) {
     return Warehouse.create(data)
 }
 
-async function findWarehouseById(id) {
-    return Warehouse.findByPK(id, {
+async function getWarehouseById(id) {
+    return Warehouse.findByPk(id, {
         include: [
             {
                 model: Item,
@@ -20,7 +20,7 @@ async function getAllWarehouse() {
 }
 
 async function updateWarehouse(id, data) {
-    const warehouse = await Warehouse.findByPK(id)
+    const warehouse = await Warehouse.findByPk(id)
     if (!warehouse) {
         return null
     }
@@ -30,7 +30,7 @@ async function updateWarehouse(id, data) {
 }
 
 async function deleteWarehouse(id) {
-    const warehouse = await Warehouse.findByPK(id)
+    const warehouse = await Warehouse.findByPk(id)
     if (!warehouse) {
         return null
     }
@@ -41,7 +41,7 @@ async function deleteWarehouse(id) {
 
 module.exports = {
     createWarehouse,
-    findWarehouseById,
+    getWarehouseById,
     getAllWarehouse,
     updateWarehouse,
     deleteWarehouse

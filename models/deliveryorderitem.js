@@ -11,30 +11,46 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      DeliveryOrderItem.belongsTo(models.DeliveryOrder, { foreignKey: 'deliveryOrderId', as: 'deliveryOrder' })
-      DeliveryOrderItem.belongsTo(models.Item, { foreignKey: 'itemId', as: 'item' })
+      DeliveryOrderItem.belongsTo(models.DeliveryOrder, {
+        foreignKey: 'deliveryOrderId',
+        as: 'deliveryOrder'
+      });
+
+      DeliveryOrderItem.belongsTo(models.Item, {
+        foreignKey: 'itemId',
+        as: 'item'
+      });
     }
   }
-  DeliveryOrderItem.init({
-    deliveryOrderId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+  DeliveryOrderItem.init(
+    {
+      deliveryOrderId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      itemId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      quantityShipped: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      },
+      unitPrice: {
+        type: DataTypes.DECIMAL(15, 2),
+        allowNull: true
+      }
     },
-    itemId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    unitPrice: {
-      type: DataTypes.DECIMAL,
-      allowNull: false
+    {
+      sequelize,
+      modelName: 'DeliveryOrderItem'
     }
-  }, {
-    sequelize,
-    modelName: 'DeliveryOrderItem',
-  });
+  );
+
   return DeliveryOrderItem;
 };

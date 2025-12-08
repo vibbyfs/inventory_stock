@@ -1,4 +1,4 @@
-const { PurchaseOrder, PurchaseOrderItem } = require('../../models')
+const { PurchaseOrder, PurchaseOrderItem, Item, User } = require('../../models')
 
 async function createPurchaseOrder(poData, itemsData, transaction) {
     const purchaseOrder = await PurchaseOrder.create(poData, { transaction })
@@ -13,7 +13,7 @@ async function createPurchaseOrder(poData, itemsData, transaction) {
     return purchaseOrder
 }
 
-async function findPurchaseById(id, transaction) {
+async function findPurchaseOrderById(id, transaction) {
     return PurchaseOrder.findByPk(id, {
         include: [
             {
@@ -28,11 +28,13 @@ async function findPurchaseById(id, transaction) {
             },
             {
                 model: User,
-                as: 'creator'
+                as: 'creator',
+                attributes: { exclude: ['password'] }
             },
             {
                 model: User,
-                as: 'updater'
+                as: 'updater',
+                attributes: { exclude: ['password'] }
             }
 
         ],
@@ -40,7 +42,7 @@ async function findPurchaseById(id, transaction) {
     })
 }
 
-async function updatePurchaseOrder(id, data, { transaction }) {
+async function updatePurchaseOrder(id, data, transaction) {
     const purchaseOrder = await PurchaseOrder.findByPk(id, { transaction })
 
     if (!purchaseOrder) {
@@ -53,7 +55,7 @@ async function updatePurchaseOrder(id, data, { transaction }) {
 
 module.exports = {
     createPurchaseOrder,
-    findPurchaseById,
+    findPurchaseOrderById,
     updatePurchaseOrder
 }
 

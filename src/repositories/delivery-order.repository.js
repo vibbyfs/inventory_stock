@@ -33,11 +33,13 @@ async function findDeliveryOrderById(id, transaction) {
             },
             {
                 model: User,
-                as: 'createdByUser'
+                as: 'creator',
+                attributes: { exclude: ['password'] }
             },
             {
                 model: User,
-                as: 'updatedByUser'
+                as: 'updater',
+                attributes: { exclude: ['password'] }
             }
         ],
         transaction

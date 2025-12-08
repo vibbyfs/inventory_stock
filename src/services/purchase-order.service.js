@@ -15,7 +15,7 @@ async function createPurchaseOrder({ supplierName, orderDate, items, userId }) {
         const poData = {
             code,
             supplierName,
-            status: 'DRAFT',
+            status: 'draft',
             orderDate: new Date(orderDate),
             createdBy: userId
         };
@@ -24,7 +24,7 @@ async function createPurchaseOrder({ supplierName, orderDate, items, userId }) {
             itemId: i.itemId,
             quantityOrdered: i.quantityOrdered,
             quantityReceived: 0,
-            unitPrice: i.unitPrice || null
+            unitPrice: i.unitPrice || 0
         }));
 
         const purchaseOrder = await purchaseOrderRepository.createPurchaseOrder(
@@ -33,15 +33,18 @@ async function createPurchaseOrder({ supplierName, orderDate, items, userId }) {
             t
         );
 
-        await t.commit();
-
         const poWithItems = await purchaseOrderRepository.findPurchaseOrderById(
-            purchaseOrder.id
+            purchaseOrder.id,
+            t
         );
+
+        await t.commit();
 
         return poWithItems;
     } catch (err) {
-        await t.rollback();
+        if (!t.finished) {
+            await t.rollback();
+        }
         throw err;
     }
 }
@@ -61,7 +64,7 @@ async function receivePurchaseOrder({ poId, receivedDate, items, userId }) {
         }
 
         if (po.status === 'RECEIVED') {
-            throw badRequest('Purchase order already received');
+            throw badRequest('Purchase order already fully received');
         }
 
         const receivedMap = new Map();
@@ -69,12 +72,18 @@ async function receivePurchaseOrder({ poId, receivedDate, items, userId }) {
             receivedMap.set(i.itemId, i.quantityReceived);
         }
 
+        let anyReceived = false;
+
+        const updatedInfo = [];
+
         for (const poItem of po.items) {
             const qtyToReceive = receivedMap.get(poItem.itemId) || 0;
 
             if (qtyToReceive <= 0) {
                 continue;
             }
+
+            anyReceived = true;
 
             const newQtyReceived = poItem.quantityReceived + qtyToReceive;
 
@@ -86,6 +95,12 @@ async function receivePurchaseOrder({ poId, receivedDate, items, userId }) {
                 { quantityReceived: newQtyReceived },
                 { transaction: t }
             );
+
+            updatedInfo.push({
+                itemId: poItem.itemId,
+                quantityOrdered: poItem.quantityOrdered,
+                quantityReceived: newQtyReceived
+            });
 
             const item = await Item.findByPk(poItem.itemId, { transaction: t });
             if (!item) {
@@ -114,22 +129,50 @@ async function receivePurchaseOrder({ poId, receivedDate, items, userId }) {
             );
         }
 
+        if (!anyReceived) {
+            throw badRequest('No quantity to receive');
+        }
+
+        let allReceived = true;
+
+        for (const poItem of po.items) {
+            const info = updatedInfo.find((u) => u.itemId === poItem.itemId);
+
+            const qtyOrdered = info ? info.quantityOrdered : poItem.quantityOrdered;
+            const qtyReceivedNow = info
+                ? info.quantityReceived
+                : poItem.quantityReceived;
+
+            if (qtyReceivedNow < qtyOrdered) {
+                allReceived = false;
+                break;
+            }
+        }
+
+        const newStatus = allReceived ? 'approved' : 'pending';
+
         await purchaseOrderRepository.updatePurchaseOrder(
             po.id,
             {
-                status: 'RECEIVED',
+                status: newStatus,
                 receivedDate: new Date(receivedDate),
                 updatedBy: userId
             },
             t
         );
 
+        const updatedPo = await purchaseOrderRepository.findPurchaseOrderById(
+            po.id,
+            t
+        );
+
         await t.commit();
 
-        const updatedPo = await purchaseOrderRepository.findPurchaseOrderById(po.id);
         return updatedPo;
     } catch (err) {
-        await t.rollback();
+        if (!t.finished) {
+            await t.rollback();
+        }
         throw err;
     }
 }

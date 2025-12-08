@@ -1,6 +1,6 @@
 const { hashPassword } = require('../utils/bcryptjs')
 const userRepository = require('../repositories/user.repository')
-const { generateAccessToken, generateRefreshToken } = require('../utils/jwt')
+const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/jwt')
 const { unauthorized } = require('../utils/errors')
 
 async function login({ email, password }) {
@@ -28,6 +28,28 @@ async function login({ email, password }) {
     }
 }
 
+async function refreshToken(token) {
+    try {
+        const decoded = await verifyRefreshToken(token)
+
+        const payload = {
+            userId: decoded.userId,
+            roleId: decoded.roleId
+        }
+
+        const newAccessToken = await generateAccessToken(payload)
+        const newRefreshToken = await generateRefreshToken(payload)
+
+        return {
+            access_token: newAccessToken,
+            refresh_token: newRefreshToken
+        }
+    } catch (error) {
+        throw unauthorized('Invalid or expired refresh token')
+    }
+}
+
 module.exports = {
-    login
+    login,
+    refreshToken
 }

@@ -29,7 +29,7 @@ module.exports = {
       },
       receivedDate: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
       },
       createdBy: {
         type: Sequelize.INTEGER,
@@ -43,7 +43,7 @@ module.exports = {
       },
       updatedBy: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Users',
           key: 'id'

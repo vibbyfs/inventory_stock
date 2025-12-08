@@ -1,7 +1,13 @@
 const itemRepository = require('../repositories/item.repository')
-const { notFound } = require('../utils/errors')
+const warehouseRepository = require('../repositories/warehouse.repository')
+const { notFound, badRequest } = require('../utils/errors')
 
 async function createItem(data) {
+    const warehouse = await warehouseRepository.getWarehouseById(data.warehouseId)
+    if (!warehouse) {
+        throw badRequest('Warehouse not found')
+    }
+
     const item = await itemRepository.createItem(data)
     return item
 }
@@ -21,7 +27,7 @@ async function getItemById(id) {
 
 async function updateitem(id, data) {
     const item = await itemRepository.updateItem(id, data)
-    if (item) {
+    if (!item) {
         throw notFound('Item not found')
     }
     return item

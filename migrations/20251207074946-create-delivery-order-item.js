@@ -33,6 +33,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      quantityShipped: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      },
       unitPrice: {
         type: Sequelize.DECIMAL,
         allowNull: false

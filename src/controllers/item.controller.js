@@ -57,7 +57,7 @@ async function updateItem(req, res, next) {
 
         const validateData = updateItemSchema.parse(req.body)
 
-        const item = await itemService.updateitem(validateData)
+        const item = await itemService.updateitem(id, validateData)
 
         res.status(200).json({
             message: 'Item updated successfully',

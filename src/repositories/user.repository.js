@@ -14,6 +14,7 @@ async function findUserByEmail(email) {
 
 async function findUserByPK(id) {
     return User.findByPk(id, {
+        attributes: { exclude: ['password'] },
         include: [
             {
                 model: Role,

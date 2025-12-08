@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Items',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -39,9 +39,9 @@ module.exports = {
       },
       updatedBy: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: 'Items',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',

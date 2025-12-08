@@ -45,6 +45,7 @@ async function shipDeliveryOrder(req, res, next) {
         const deliveryOrder = await deliveryOrderService.shipDeliveryOrder({
             doId: id,
             shippedDate: validated.shippedDate,
+            items: validated.items,
             userId: req.user.id
         });
 

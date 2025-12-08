@@ -1,8 +1,7 @@
-// src/routes/delivery-order.routes.js
 const express = require('express');
 const deliveryOrderController = require('../controllers/delivery-order.controller');
 const {
-    authenticate,
+    authentication,
     authorize
 } = require('../middlewares/auth.middleware');
 
@@ -10,14 +9,14 @@ const router = express.Router();
 
 router.post(
     '/',
-    authenticate,
+    authentication,
     authorize('admin', 'staff'),
     deliveryOrderController.createDeliveryOrder
 );
 
 router.post(
     '/:id/ship',
-    authenticate,
+    authentication,
     authorize('admin', 'staff'),
     deliveryOrderController.shipDeliveryOrder
 );

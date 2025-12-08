@@ -6,6 +6,10 @@ async function authentication(req, res, next) {
     try {
         const authorization = req.headers.authorization
 
+        if (!authorization) {
+            throw unauthorized()
+        }
+
         const rawToken = authorization.split(' ')
         const keyToken = rawToken[0]
         const valueToken = rawToken[1]

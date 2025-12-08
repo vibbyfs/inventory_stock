@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     receivedDate: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     createdBy: {
       type: DataTypes.INTEGER,
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     updatedBy: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

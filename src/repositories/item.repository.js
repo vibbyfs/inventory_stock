@@ -4,10 +4,14 @@ async function createItem(data) {
     return Item.create(data)
 }
 
-async function findItemByPK(id) {
-    return Item.findByPK(id, {
-        include: Warehouse,
-        as: 'warehouse'
+async function getItemById(id) {
+    return Item.findByPk(id, {
+        include: [
+            {
+                model: Warehouse,
+                as: 'warehouse'
+            }
+        ]
     })
 }
 
@@ -16,7 +20,7 @@ async function getAllItems() {
 }
 
 async function updateItem(id, data) {
-    const item = await Item.findByPK(id)
+    const item = await Item.findByPk(id)
     if (!item) {
         return null
     }
@@ -26,7 +30,7 @@ async function updateItem(id, data) {
 }
 
 async function deleteItem(id) {
-    const item = await item.findByPK(id)
+    const item = await Item.findByPk(id)
     if (!item) {
         return null
     }
@@ -37,7 +41,7 @@ async function deleteItem(id) {
 
 module.exports = {
     createItem,
-    findItemByPK,
+    getItemById,
     getAllItems,
     updateItem,
     deleteItem

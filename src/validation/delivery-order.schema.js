@@ -25,10 +25,23 @@ const createDeliveryOrderSchema = z.object({
         .min(1, 'At least one item is required')
 });
 
+const shipDeliveryOrderItemSchema = z.object({
+    itemId: z
+        .number()
+        .int('itemId must be integer'),
+    quantityShipped: z
+        .number()
+        .int('quantityShipped must be integer')
+        .min(1, 'quantityShipped must be at least 1')
+});
+
 const shipDeliveryOrderSchema = z.object({
     shippedDate: z
         .string()
-        .min(1, 'shippedDate is required')
+        .min(1, 'shippedDate is required'),
+    items: z
+        .array(shipDeliveryOrderItemSchema)
+        .min(1, 'At least one item is required')
 });
 
 module.exports = {

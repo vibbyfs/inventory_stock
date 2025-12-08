@@ -32,7 +32,7 @@ async function deleteWarehouse(id) {
     if (!deleteWarehouse) {
         throw notFound('Warehouse not found')
     }
-    return warehouse
+    return deleteWarehouse
 }
 
 module.exports = {
