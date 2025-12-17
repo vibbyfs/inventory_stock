@@ -19,7 +19,6 @@ async function authentication(req, res, next) {
         }
 
         const token = await verifyAccessToken(valueToken)
-        console.log(token);
 
         const user = await userRepository.findUserByPK(token.userId)
         if (!user) {
