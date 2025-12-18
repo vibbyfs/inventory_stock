@@ -1,4 +1,4 @@
-const { hashPassword } = require('../utils/bcryptjs')
+const { comparePassword } = require('../utils/bcryptjs')
 const userRepository = require('../repositories/user.repository')
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/jwt')
 const { unauthorized } = require('../utils/errors')
@@ -8,7 +8,7 @@ async function login({ email, password }) {
     if (!user) {
         throw unauthorized('Invalid email or password')
     }
-    const isPasswordValid = await hashPassword(password, user.password)
+    const isPasswordValid = await comparePassword(password, user.password)
     if (!isPasswordValid) {
         throw unauthorized('Invalid email or password')
     }

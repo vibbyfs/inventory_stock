@@ -15,12 +15,25 @@ async function login(req, res, next) {
             email: user.email,
             roleId: user.roleId
         }
+
+        res.cookie('access_token', access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000
+        })
+
+        res.cookie('refresh_token', refresh_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
         res.status(200).json({
             status: 'success',
             data: {
-                user: userWithoutPassword,
-                access_token,
-                refresh_token
+                user: userWithoutPassword
             }
         })
     } catch (err) {
@@ -30,7 +43,7 @@ async function login(req, res, next) {
 
 async function refresh(req, res, next) {
     try {
-        const { refresh_token } = req.body
+        const { refresh_token } = req.cookies
 
         if (!refresh_token) {
             throw badRequest('Refresh token is required')
@@ -38,9 +51,45 @@ async function refresh(req, res, next) {
 
         const tokens = await authService.refreshToken(refresh_token)
 
+        res.cookie('access_token', tokens.access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000
+        })
+
+        res.cookie('refresh_token', tokens.refresh_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
         res.status(200).json({
             status: 'success',
-            data: tokens
+            message: 'Token refreshed successfully'
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
+async function logout(req, res, next) {
+    try {
+        res.clearCookie('access_token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        })
+        res.clearCookie('refresh_token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        })
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Logged out successfully'
         })
     } catch (err) {
         next(err)
@@ -49,5 +98,6 @@ async function refresh(req, res, next) {
 
 module.exports = {
     login,
-    refresh
+    refresh,
+    logout
 }

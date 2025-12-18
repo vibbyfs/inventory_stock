@@ -4,23 +4,15 @@ const { unauthorized, forbidden } = require('../utils/errors')
 
 async function authentication(req, res, next) {
     try {
-        const authorization = req.headers.authorization
+        const token = req.cookies.access_token
 
-        if (!authorization) {
+        if (!token) {
             throw unauthorized()
         }
 
-        const rawToken = authorization.split(' ')
-        const keyToken = rawToken[0]
-        const valueToken = rawToken[1]
+        const decoded = await verifyAccessToken(token)
 
-        if (keyToken !== 'Bearer' || !valueToken) {
-            throw unauthorized()
-        }
-
-        const token = await verifyAccessToken(valueToken)
-
-        const user = await userRepository.findUserByPK(token.userId)
+        const user = await userRepository.findUserByPK(decoded.userId)
         if (!user) {
             throw unauthorized()
         }
