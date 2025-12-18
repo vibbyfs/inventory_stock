@@ -1,5 +1,5 @@
-import Input from "../../../shared/ui/Input";
-import Button from "../../../shared/ui/Button";
+import Input from "../../../components/ui/Input";
+import Button from "../../../components/ui/Button";
 
 export default function LoginForm({
   email,

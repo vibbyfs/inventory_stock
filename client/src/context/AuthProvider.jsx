@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { loginApi, logoutApi, refreshApi } from "../api/authApi";
+import { useEffect, useMemo, useState } from "react";
+import { loginApi, logoutApi, refreshApi } from "../features/auth/api";
 import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {

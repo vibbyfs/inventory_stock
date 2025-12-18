@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import LoginForm from "../components/LoginForm";
-import { useAuth } from "../context";
-import { ROUTE_PATHS } from "../../../app/routes/routePaths";
+import LoginForm from "./components/LoginForm";
+import { useAuth } from "../../context/useAuth";
+import { ROUTE_PATHS } from "../../routes/paths";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -32,7 +32,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
         <h1 className="text-xl font-semibold text-slate-900">Login</h1>
         <p className="mt-1 text-sm text-slate-600">
-          Auth menggunakan HttpOnly Cookies.
+          Login to your dashboard Inventory Management
         </p>
 
         <div className="mt-6">

@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router";
-import { ROUTE_PATHS } from "./routePaths";
+import { ROUTE_PATHS } from "./paths";
 
-import RequireAuth from "../../features/auth/guards/RequireAuth";
-import LoginPage from "../../features/auth/pages/LoginPages";
-import AppLayout from "../../shared/layouts/AppLayout";
+import RequireAuth from "../features/auth/components/RequireAuth";
+import LoginPage from "../features/auth/LoginPage";
+import AppLayout from "../components/layouts/AppLayout";
 
 function Placeholder({ title }) {
   return (
@@ -32,6 +32,14 @@ export default function AppRoutes() {
           <Route
             path={ROUTE_PATHS.items}
             element={<Placeholder title="Items" />}
+          />
+          <Route
+            path={ROUTE_PATHS.purchaseOrders}
+            element={<Placeholder title="Purchase Orders" />}
+          />
+          <Route
+            path={ROUTE_PATHS.deliveryOrders}
+            element={<Placeholder title="Delivery Orders" />}
           />
         </Route>
       </Route>

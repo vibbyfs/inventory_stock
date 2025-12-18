@@ -3,4 +3,6 @@ export const ROUTE_PATHS = {
     home: "/",
     warehouses: "/warehouses",
     items: "/items",
+    purchaseOrders: "/purchase-orders",
+    deliveryOrders: "/delivery-orders",
 };
