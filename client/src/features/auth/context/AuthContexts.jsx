@@ -1,7 +1,6 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { loginApi, logoutApi, refreshApi } from "../api/authApi";
-
-const AuthContext = createContext(null);
+import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {
   const [status, setStatus] = useState("checking");
@@ -12,10 +11,9 @@ export function AuthProvider({ children }) {
 
     (async () => {
       try {
-        const data = await refreshApi();
+        await refreshApi();
         if (!mounted) return;
         setStatus("authed");
-        if (data?.user) setUser(data.user);
       } catch {
         if (!mounted) return;
         setStatus("guest");
@@ -45,13 +43,7 @@ export function AuthProvider({ children }) {
   };
 
   const value = useMemo(
-    () => ({
-      status,
-      user,
-      isAuthed: status === "authed",
-      login,
-      logout,
-    }),
+    () => ({ status, user, isAuthed: status === "authed", login, logout }),
     [status, user]
   );
 

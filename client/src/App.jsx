@@ -1,13 +1,13 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter } from "react-router";
+import AppProviders from "./app/providers/AppProviders";
+import AppRoutes from "./app/routes/AppRoutes";
 
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<h1 className="text-red-400">Hello</h1>} />
-      </Routes>
-    </BrowserRouter>
+    <AppProviders>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AppProviders>
   );
 }
-
-export default App;
